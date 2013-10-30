@@ -35,6 +35,34 @@ If `requireConfigFile` is specified then it will be loaded first and the setting
 ## Sample usage
 
 ```js
+//config with additional script tags injected into SpecRunner.html page
+jasmine: {
+    taskName: {
+        options: {
+            specs: '...',
+            template: require('grunt-template-jasmine-requirejs'),
+            templateOptions: {
+                //these are views that need to be rendered into the generated
+                //_SpecRunner.html page that loads our tests
+                inlineScripts: [
+                    /*
+                    { 
+                        template:    (String) relative path to template file in this repo,
+                        context:     (Optional) (Object) the context to provide to the template
+                        contextPath: (Optional) (String) relative path to a module to be loaded to provide context to the template
+                        ... if no context or contextPath is provided, context passed to template will be an empty object.
+                    }
+                    */
+                ],
+                requireConfigFile: 'path/to/require-config.js'
+            }
+        }
+    }
+},
+```
+
+
+```js
 // Example configuration using a single requireJS config file
 grunt.initConfig({
   connect: {
