@@ -1,5 +1,8 @@
 "use strict";
 
+var ejs = require('ejs');
+var fs = require('fs');
+
 var template = __dirname + '/templates/jasmine-requirejs.html',
     requirejs  = {
       '2.0.0' : __dirname + '/../vendor/require-2.0.0.js',
@@ -151,6 +154,31 @@ exports.process = function(grunt, task, context) {
 
       return jsonString;
   };
+
+  context.inlineScripts = [];
+
+  var _getEjsRenderedPartial = function (relativePath, context) {
+    var fileSrc = fs.readFileSync(relativePath, 'utf8');
+    return ejs.render(fileSrc, context);
+  };
+
+  if (context.options.inlineScripts) {
+    context.options.inlineScripts.forEach(function (item) {
+      // var _context = item.context || {};
+      var _context;
+      if (item.context) {
+        _context = item.context;
+      } else if (item.contextPath) {
+        var contextPath = path.join(process.cwd(), item.contextPath);
+        _context = require(contextPath);
+      } else {
+        _context = {};
+      }
+      var _template = item.template;
+      var renderedEjs = _getEjsRenderedPartial(_template, _context);
+      context.inlineScripts.push(renderedEjs);
+    });
+  }
 
   var source = grunt.file.read(template);
   return grunt.util._.template(source, context);

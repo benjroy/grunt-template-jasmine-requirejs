@@ -8,6 +8,8 @@
   <link rel="stylesheet" type="text/css" href="<%= style %>">
   <% }) %>
 
+  <%= inlineScripts.join('') %>
+
   <script src="<%= temp %>/require.js"></script>
   <script>
     require.onError = function(error) {
