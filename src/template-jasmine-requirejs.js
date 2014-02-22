@@ -162,6 +162,12 @@ exports.process = function(grunt, task, context) {
     return ejs.render(fileSrc, context);
   };
 
+  if (context.options.scripts) {
+    context.options.scripts.forEach(function (src) {
+      context.inlineScripts.push('<script src="' + src + '" type="text\/javascript"><\/script>');
+    });
+  }
+
   if (context.options.inlineScripts) {
     context.options.inlineScripts.forEach(function (item) {
       // var _context = item.context || {};
